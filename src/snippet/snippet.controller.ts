@@ -1,7 +1,7 @@
 import { Controller } from "@nestjs/common";
 import { SnippetService } from "./snippet.service";
 import { MessagePattern } from "@nestjs/microservices";
-import type { Snippet } from "@/domain/snippet";
+import { Snippet } from "../domain/snippet";
 
 @Controller()
 export class SnippetController {
