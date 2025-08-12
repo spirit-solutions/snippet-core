@@ -1,13 +1,22 @@
 import { NestFactory } from "@nestjs/core";
 import { AppModule } from "./app.module";
+import { MicroserviceOptions, Transport } from "@nestjs/microservices";
 
-const PORT = process.env.PORT ?? 3000;
+const port = Number(process.env.PORT) || 12000;
 
 async function bootstrap() {
-	const app = await NestFactory.create(AppModule);
-	await app.listen(PORT);
+	const app = await NestFactory.createMicroservice<MicroserviceOptions>(
+		AppModule,
+		{
+			transport: Transport.TCP,
+			options: {
+				host: "127.0.0.1",
+				port
+			}
+		}
+	);
+
+	await app.listen();
 }
 
-bootstrap()
-	.then(() => console.log(`Yo, let's get to it. Listening on port ${PORT}`))
-	.catch(console.error);
+bootstrap().catch(console.error);
