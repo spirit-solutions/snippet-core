@@ -3,12 +3,14 @@ import eslint from '@eslint/js';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
 import stylistic from '@stylistic/eslint-plugin'
+import security from "eslint-plugin-security"
 
 export default tseslint.config(
 	{
 		ignores: ['eslint.config.mjs'],
 	},
 	eslint.configs.recommended,
+	security.configs.recommended,
 	...tseslint.configs.recommendedTypeChecked,
 	stylistic.configs.customize({
 		semi: true,
