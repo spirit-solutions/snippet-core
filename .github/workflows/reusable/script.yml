@@ -1,9 +1,14 @@
-name: "Reusable Lint Workflow"
+name: "Reusable Script Workflow"
 
-on: [workflow_call]
+on:
+  workflow_call:
+    inputs:
+      script:
+        required: true
+        type: string
 
 jobs:
-  lint:
+  script:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
@@ -19,4 +24,4 @@ jobs:
           bun-version-file: ".bun-version"
 
       - run: bun install
-      - run: bun lint
+      - run: bun run ${{ inputs["script"] }}

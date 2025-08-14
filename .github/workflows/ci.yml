@@ -7,4 +7,23 @@ on:
 
 jobs:
   lint:
-    uses: ./.github/workflows/reusable/lint.yml
+    uses: ./.github/workflows/reusable/script.yml
+    with:
+      script: "lint"
+
+  unit:
+    needs: [build,lint]
+    uses: ./.github/workflows/reusable/script.yml
+    with:
+      script: "test:unit"
+
+  integration:
+    needs: [build,lint]
+    uses: ./.github/workflows/reusable/script.yml
+    with:
+      script: "test:integration"
+
+  build:
+    uses: ./.github/workflows/reusable/script.yml
+    with:
+      script: "build"
