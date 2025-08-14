@@ -24,4 +24,4 @@ jobs:
           bun-version-file: ".bun-version"
 
       - run: bun install
-      - run: bun run ${{ inputs["script"] }}
+      - run: bun run ${{ inputs.script }}
