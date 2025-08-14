@@ -27,3 +27,22 @@ jobs:
     uses: ./.github/workflows/script.yml
     with:
       script: "build"
+
+  docker:
+    needs: [unit, integration]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/snippet-service:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/snippet-service:${{ github.sha }}
