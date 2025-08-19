@@ -5,6 +5,7 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { SnippetModule } from "./snippet/snippet.module";
 import { Snippet } from "./domain/snippet";
 import { ConfigModule, ConfigService } from "@nestjs/config";
+import { HealthModule } from "./health/health.module";
 
 @Module({
 	imports: [
@@ -23,7 +24,8 @@ import { ConfigModule, ConfigService } from "@nestjs/config";
 				entities: [Snippet],
 				synchronize: true
 			})
-		})
+		}),
+		HealthModule
 	],
 	controllers: [AppController],
 	providers: [AppService]

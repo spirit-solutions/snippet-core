@@ -18,6 +18,7 @@ async function bootstrap() {
 		}
 	);
 
+	app.enableShutdownHooks();
 	app.useGlobalPipes(new ValidationPipe({
 		whitelist: true,
 		forbidNonWhitelisted: true,
