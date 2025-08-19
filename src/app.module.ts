@@ -1,6 +1,4 @@
 import { Module } from "@nestjs/common";
-import { AppController } from "./app.controller";
-import { AppService } from "./app.service";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { SnippetModule } from "./snippet/snippet.module";
 import { Snippet } from "./domain/snippet";
@@ -36,8 +34,6 @@ import { configSchema } from "./env";
 			})
 		}),
 		HealthModule
-	],
-	controllers: [AppController],
-	providers: [AppService]
+	]
 })
 export class AppModule {}
