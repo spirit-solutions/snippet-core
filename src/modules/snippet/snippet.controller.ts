@@ -1,7 +1,7 @@
 import { Body, Controller } from "@nestjs/common";
 import { SnippetService } from "./snippet.service";
 import { MessagePattern } from "@nestjs/microservices";
-import { Snippet } from "../domain/snippet";
+import { Snippet } from "../../domain/entities/snippet";
 import { CreateSnippetDto } from "./dto/create-snippet.dto";
 
 @Controller()

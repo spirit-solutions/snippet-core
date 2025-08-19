@@ -1,10 +1,10 @@
 import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { SnippetModule } from "./snippet/snippet.module";
-import { Snippet } from "./domain/snippet";
+import { Snippet } from "../domain/entities/snippet";
 import { ConfigModule } from "@nestjs/config";
 import { HealthModule } from "./health/health.module";
-import { configSchema } from "./env";
+import { configSchema } from "../env";
 
 @Module({
 	imports: [

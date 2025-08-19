@@ -1,7 +1,7 @@
 import { HttpStatus, Injectable, Logger } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { Snippet } from "../domain/snippet";
+import { Snippet } from "../../domain/entities/snippet";
 import { CreateSnippetDto } from "./dto/create-snippet.dto";
 import { createHash } from "node:crypto";
 import { RpcException } from "@nestjs/microservices";
