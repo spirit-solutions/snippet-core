@@ -1,31 +1,33 @@
 import { HttpStatus, Injectable, Logger } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { Snippet } from "../../domain/entities/snippet";
 import { CreateSnippetDto } from "./dto/create-snippet.dto";
-import { createHash } from "node:crypto";
 import { RpcException } from "@nestjs/microservices";
+import { Snippet } from "./domain/entities/snippet";
+import { Language } from "./domain/entities/language";
+import { SnippetEntity } from "./infrastructure/snippet";
 
 @Injectable()
 export class SnippetService {
 	private readonly logger = new Logger(SnippetService.name);
 
-	constructor(@InjectRepository(Snippet) private snippetRepository: Repository<Snippet>) {}
+	constructor(@InjectRepository(SnippetEntity) private snippetRepository: Repository<SnippetEntity>) {}
 
 	public getAll() {
 		this.logger.log("Getting all snippets");
 		return this.snippetRepository.find();
 	}
 
-	public async createSnippet(data: CreateSnippetDto) {
-		this.logger.log("Creating a new snippet", data);
+	public async createSnippet({ code, language }: CreateSnippetDto) {
+		this.logger.log("Creating a new snippet");
 
-		// normalize
-		data.code = data.code.trim();
+		const snippet = Snippet.create({
+			code,
+			language: Language.create(language)
+		});
 
-		const code_hash = this.calculateCodeHash(data.code);
-		if (await this.doesCodeExists(code_hash)) {
-			this.logger.warn(`Snippet with this code already exists: ${code_hash.toString("hex")}`);
+		if (await this.doesCodeExists(snippet.code_hash)) {
+			this.logger.warn(`Snippet with this code already exists: ${snippet.code_hash.toString("hex")}`);
 			throw new RpcException({
 				status: HttpStatus.CONFLICT,
 				message: "Snippet with this code already exists"
@@ -33,19 +35,11 @@ export class SnippetService {
 		}
 
 		return this.snippetRepository.save({
-			code: data.code,
-			code_hash: this.calculateCodeHash(data.code)
+			id: snippet.id,
+			code: snippet.code,
+			code_hash: snippet.code_hash,
+			language: snippet.language.value
 		});
-	}
-
-	/**
-	 * Calculate the SHA-256 hash of the given code.
-	 *
-	 * @param code normalized code (trimmed and without extra whitespace)
-	 * @returns SHA-256 hash of the code
-	 */
-	private calculateCodeHash(code: string): Buffer {
-		return createHash("sha256").update(code).digest();
 	}
 
 	/**
@@ -53,10 +47,10 @@ export class SnippetService {
 	 *
 	 * @param value string or Buffer
 	 */
-	private doesCodeExists(value: string | Uint8Array<ArrayBufferLike>) {
+	private doesCodeExists(value: string | Buffer) {
 		return this.snippetRepository.exists({
 			where: {
-				code_hash: typeof value === "string" ? this.calculateCodeHash(value) : value
+				code_hash: typeof value === "string" ? Snippet.generateCodeHash(value) : value
 			}
 		});
 	}

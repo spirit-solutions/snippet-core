@@ -1,10 +1,10 @@
 import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { SnippetModule } from "./snippet/snippet.module";
-import { Snippet } from "../domain/entities/snippet";
 import { ConfigModule } from "@nestjs/config";
 import { HealthModule } from "./health/health.module";
 import { configSchema } from "../env";
+import { SnippetEntity } from "./snippet/infrastructure/snippet";
 
 @Module({
 	imports: [
@@ -29,7 +29,7 @@ import { configSchema } from "../env";
 				username: process.env.POSTGRES_USERNAME,
 				password: process.env.POSTGRES_PASSWORD,
 				database: "swa",
-				entities: [Snippet],
+				entities: [SnippetEntity],
 				synchronize: true
 			})
 		}),
