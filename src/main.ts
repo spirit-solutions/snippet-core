@@ -3,9 +3,6 @@ import { AppModule } from "./app.module";
 import { MicroserviceOptions, Transport } from "@nestjs/microservices";
 import { ConsoleLogger, ValidationPipe } from "@nestjs/common";
 
-const port = Number(process.env.PORT) || 12000;
-const host = process.env.SNIPPET_SERVICE_HOST || "127.0.0.1";
-
 async function bootstrap() {
 	const app = await NestFactory.createMicroservice<MicroserviceOptions>(
 		AppModule,
@@ -15,8 +12,8 @@ async function bootstrap() {
 			}),
 			transport: Transport.TCP,
 			options: {
-				host,
-				port
+				host: process.env.SNIPPET_SERVICE_HOST,
+				port: 12000
 			}
 		}
 	);
