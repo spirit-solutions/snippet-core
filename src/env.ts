@@ -4,7 +4,8 @@ export const configSchema = object({
 	POSTGRES_HOST: string(),
 	POSTGRES_USERNAME: string(),
 	POSTGRES_PASSWORD: string(),
-	SNIPPET_SERVICE_HOST: string().default("localhost")
+	SNIPPET_SERVICE_HOST: string().default("localhost"),
+	RABBITMQ_CONNECTION_URL: string().startsWith("amqp://")
 });
 
 export type ConfigSchema = z.infer<typeof configSchema>;

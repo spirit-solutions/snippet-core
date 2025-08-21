@@ -6,12 +6,16 @@ import { RpcException } from "@nestjs/microservices";
 import { Snippet } from "./domain/entities/snippet";
 import { Language } from "./domain/entities/language";
 import { SnippetEntity } from "./infrastructure/snippet";
+import { SearchService } from "../search/search.service";
 
 @Injectable()
 export class SnippetService {
 	private readonly logger = new Logger(SnippetService.name);
 
-	constructor(@InjectRepository(SnippetEntity) private snippetRepository: Repository<SnippetEntity>) {}
+	constructor(
+		@InjectRepository(SnippetEntity) private snippetRepository: Repository<SnippetEntity>,
+		private searchService: SearchService
+	) {}
 
 	public getAll() {
 		this.logger.log("Getting all snippets");
@@ -33,6 +37,8 @@ export class SnippetService {
 				message: "Snippet with this code already exists"
 			});
 		}
+
+		await this.searchService.onSnippetCreated(snippet);
 
 		return this.snippetRepository.save({
 			id: snippet.id,
