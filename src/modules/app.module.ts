@@ -3,11 +3,15 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { SnippetModule } from "./snippet/snippet.module";
 import { ConfigModule } from "@nestjs/config";
 import { HealthModule } from "./health/health.module";
+import { OutboxModule } from "./outbox/outbox.module";
 import { configSchema } from "../env";
 import { SnippetEntity } from "./snippet/infrastructure/snippet";
+import { OutboxEntity } from "./outbox/infrastructure/outbox";
+import { ScheduleModule } from "@nestjs/schedule";
 
 @Module({
 	imports: [
+		ScheduleModule.forRoot(),
 		ConfigModule.forRoot({
 			isGlobal: true,
 			envFilePath: [
@@ -29,11 +33,12 @@ import { SnippetEntity } from "./snippet/infrastructure/snippet";
 				username: process.env.POSTGRES_USERNAME,
 				password: process.env.POSTGRES_PASSWORD,
 				database: "swa",
-				entities: [SnippetEntity],
+				entities: [SnippetEntity, OutboxEntity],
 				synchronize: true
 			})
 		}),
-		HealthModule
+		HealthModule,
+		OutboxModule
 	]
 })
 export class AppModule {}

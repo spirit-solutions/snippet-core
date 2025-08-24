@@ -9,15 +9,6 @@ export class Snippet {
 	public static MIN_CODE_LENGTH = 5;
 	public static MAX_CODE_LENGTH = 8192;
 
-	public get all() {
-		return {
-			id: this._id,
-			code: this._code,
-			language: this._language,
-			code_hash: this._code_hash
-		};
-	}
-
 	public get id(): string {
 		return this._id;
 	}

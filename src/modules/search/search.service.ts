@@ -1,6 +1,5 @@
 import { Injectable } from "@nestjs/common";
 import { ClientProxy, ClientProxyFactory, Transport } from "@nestjs/microservices";
-import { Snippet } from "../snippet/domain/entities/snippet";
 import { firstValueFrom } from "rxjs";
 
 @Injectable()
@@ -20,13 +19,8 @@ export class SearchService {
 		});
 	}
 
-	public async onSnippetCreated(snippet: Snippet) {
-		const observable = this.searchService.emit("snippet.created", {
-			id: snippet.id,
-			code: snippet.code,
-			language: snippet.language.value
-		});
-
+	public async sendMessage(key: string, payload: object) {
+		const observable = this.searchService.emit(key, payload);
 		await firstValueFrom(observable);
 	}
 }
