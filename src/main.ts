@@ -3,20 +3,14 @@ import { AppModule } from "./modules/app.module";
 import { MicroserviceOptions, Transport } from "@nestjs/microservices";
 import { ConsoleLogger, ValidationPipe } from "@nestjs/common";
 
+const PORT = 12000 as const;
+
 async function bootstrap() {
-	const app = await NestFactory.createMicroservice<MicroserviceOptions>(
-		AppModule,
-		{
-			logger: new ConsoleLogger({
-				prefix: "SnippetService"
-			}),
-			transport: Transport.TCP,
-			options: {
-				host: process.env.SNIPPET_SERVICE_HOST,
-				port: 12000
-			}
-		}
-	);
+	const app = await NestFactory.create(AppModule, {
+		logger: new ConsoleLogger({
+			prefix: "SnippetService"
+		})
+	});
 
 	app.enableShutdownHooks();
 	app.useGlobalPipes(new ValidationPipe({
@@ -25,7 +19,16 @@ async function bootstrap() {
 		transform: true
 	}));
 
-	await app.listen();
+	app.connectMicroservice<MicroserviceOptions>({
+		transport: Transport.TCP,
+		options: {
+			host: process.env.SNIPPET_SERVICE_HOST,
+			port: PORT
+		}
+	}, { inheritAppConfig: true });
+
+	await app.startAllMicroservices();
+	await app.listen(PORT + 1);
 }
 
 bootstrap().catch(console.error);
