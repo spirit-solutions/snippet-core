@@ -30,7 +30,7 @@ import { ScheduleModule } from "@nestjs/schedule";
 				type: "postgres",
 				host: process.env.POSTGRES_HOST,
 				port: 5432,
-				username: process.env.POSTGRES_USERNAME,
+				username: process.env.POSTGRES_USER,
 				password: process.env.POSTGRES_PASSWORD,
 				database: "swa",
 				entities: [SnippetEntity, OutboxEntity],
