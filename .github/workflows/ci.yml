@@ -20,13 +20,21 @@ jobs:
     with:
       script: "test:integration"
 
+  e2e:
+    name: E2E (Testcontainers)
+    needs: [ build, lint ]
+    uses: ./.github/workflows/script.yml
+    with:
+      script: "test:e2e"
+    secrets: inherit
+
   build:
     uses: ./.github/workflows/script.yml
     with:
       script: "build"
 
   docker:
-    needs: [unit, integration]
+    needs: [unit, integration, e2e]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
