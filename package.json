@@ -12,13 +12,14 @@
 		"start:debug": "nest start --debug --watch",
 		"start:prod": "node dist/main",
 		"lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
-		"test": "jest",
-		"test:unit": "jest --testNamePattern=\"unit\"",
-		"test:integration": "jest --testNamePattern=\"integration\"",
-		"test:watch": "jest --watch",
-		"test:cov": "jest --coverage",
-		"test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-		"test:e2e": "jest -c jest.config.ts"
+
+		"test": "jest -c test/config/jest.unit.config.ts",
+		"test:unit": "jest -c test/config/jest.unit.config.ts --runInBand",
+		"test:integration": "jest -c test/config/jest.integration.config.ts --runInBand",
+		"test:e2e": "jest -c test/config/jest.e2e.config.ts --runInBand",
+		"test:watch": "jest -c test/config/jest.unit.config.ts --watch",
+		"test:cov": "jest -c test/config/jest.unit.config.ts --coverage",
+		"test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest -c test/config/jest.unit.config.ts --runInBand"
 	},
 	"dependencies": {
 		"@nestjs/cli": "11.0.10",
