@@ -6,7 +6,7 @@ const config: Config = {
 	testEnvironment: "node",
 	testMatch: ["<rootDir>/test/**/*.unit.(spec|test).ts"],
 	transform: {
-		"^.+\\.(t|j)s$": ["ts-jest", { tsconfig: "<rootDir>/tsconfig.jest.json" }],
+		"^.+\\.(t|j)s$": ["ts-jest", { tsconfig: "<rootDir>/tsconfig.jest.json" }]
 	},
 	passWithNoTests: true
 };

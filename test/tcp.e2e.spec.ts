@@ -5,7 +5,7 @@ import {
 	ClientProxy,
 	ClientProxyFactory,
 	MicroserviceOptions,
-	Transport,
+	Transport
 } from "@nestjs/microservices";
 import { firstValueFrom } from "rxjs";
 import { GenericContainer, StartedTestContainer, Wait } from "testcontainers";
@@ -17,7 +17,7 @@ const TCP_PORT = 12000;
 
 const PATTERN = {
 	CREATE: { cmd: "create_snippet" },
-	LIST_ALL: { cmd: "get_all_snippets" },
+	LIST_ALL: { cmd: "get_all_snippets" }
 };
 
 type SnippetDto = {
@@ -33,11 +33,12 @@ describe("snippet-service E2E (TCP)", () => {
 	let client: ClientProxy;
 
 	beforeAll(async () => {
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 		pg = await new GenericContainer("postgres:17.5")
 			.withEnvironment({
 				POSTGRES_USER: "tereza",
 				POSTGRES_PASSWORD: "cervenytrakturek",
-				POSTGRES_DB: "swa",
+				POSTGRES_DB: "swa"
 			})
 			.withExposedPorts(5432)
 			.withWaitStrategy(
@@ -64,14 +65,14 @@ describe("snippet-service E2E (TCP)", () => {
 		app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
 		app.connectMicroservice<MicroserviceOptions>({
 			transport: Transport.TCP,
-			options: { host: TCP_HOST, port: TCP_PORT },
+			options: { host: TCP_HOST, port: TCP_PORT }
 		});
 		await app.startAllMicroservices();
 		await app.init();
 
 		client = ClientProxyFactory.create({
 			transport: Transport.TCP,
-			options: { host: TCP_HOST, port: TCP_PORT },
+			options: { host: TCP_HOST, port: TCP_PORT }
 		});
 	}, 180000);
 
@@ -86,7 +87,7 @@ describe("snippet-service E2E (TCP)", () => {
 		const created = await firstValueFrom(
 			client.send<SnippetDto>(PATTERN.CREATE, {
 				code: "console.log('hello');",
-				language: "typescript",
+				language: "typescript"
 			})
 		);
 		expect(created.id).toBeTruthy();
@@ -97,6 +98,6 @@ describe("snippet-service E2E (TCP)", () => {
 			client.send<SnippetDto[]>(PATTERN.LIST_ALL, {})
 		);
 		expect(Array.isArray(all)).toBe(true);
-		expect(all.some((i) => i.id === created.id)).toBe(true);
+		expect(all.some(i => i.id === created.id)).toBe(true);
 	});
 });

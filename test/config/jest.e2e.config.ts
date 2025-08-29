@@ -7,10 +7,9 @@ const config: Config = {
 	testMatch: ["<rootDir>/test/**/*.e2e.(spec|test).ts"],
 	testTimeout: 180000,
 	transform: {
-		"^.+\\.(t|j)s$": ["ts-jest", { tsconfig: "<rootDir>/tsconfig.jest.json" }],
+		"^.+\\.(t|j)s$": ["ts-jest", { tsconfig: "<rootDir>/tsconfig.jest.json" }]
 	},
 	passWithNoTests: true
 };
 
 export default config;
-
