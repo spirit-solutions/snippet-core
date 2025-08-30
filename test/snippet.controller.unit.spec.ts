@@ -7,24 +7,19 @@ import { SnippetEntity } from "../src/modules/snippet/infrastructure/snippet";
 
 describe("SnippetController (unit)", () => {
 	let controller: SnippetController;
-	let service: jest.Mocked<SnippetService>;
+
+	const serviceMock: Pick<jest.Mocked<SnippetService>, "getAll" | "createSnippet"> = {
+		getAll: jest.fn(),
+		createSnippet: jest.fn()
+	};
 
 	beforeEach(async () => {
 		const moduleRef = await Test.createTestingModule({
 			controllers: [SnippetController],
-			providers: [
-				{
-					provide: SnippetService,
-					useValue: {
-						getAll: jest.fn(),
-						createSnippet: jest.fn(),
-					} as Partial<jest.Mocked<SnippetService>>,
-				},
-			],
+			providers: [{ provide: SnippetService, useValue: serviceMock }]
 		}).compile();
 
 		controller = moduleRef.get(SnippetController);
-		service = moduleRef.get(SnippetService) as jest.Mocked<SnippetService>;
 	});
 
 	afterEach(() => {
@@ -33,29 +28,26 @@ describe("SnippetController (unit)", () => {
 
 	it("get_all_snippets → service.getAll()", async () => {
 		const rows: SnippetEntity[] = [
-			{ id: "1", code: "a", code_hash: new Uint8Array([1]), language: "ts" },
+			{ id: "1", code: "a", code_hash: new Uint8Array([1]), language: "ts" }
 		];
-		service.getAll.mockResolvedValue(rows);
+		serviceMock.getAll.mockResolvedValue(rows);
 
-		const result = await controller.getSnippet();
-
-		expect(result).toEqual(rows);
-		expect(service.getAll).toHaveBeenCalledTimes(1);
+		await expect(controller.getSnippet()).resolves.toEqual(rows);
+		expect(serviceMock.getAll).toHaveBeenCalledTimes(1);
 	});
 
 	it("create_snippet → service.createSnippet(dto)", async () => {
-		const dto: CreateSnippetDto = { code: "console.log(1)", language: "typescript" as unknown as any };
+		const dto = { code: "console.log(1)", language: "typescript" } as unknown as CreateSnippetDto;
+
 		const saved: SnippetEntity = {
 			id: "generated-id",
 			code: dto.code,
 			code_hash: new Uint8Array([3]),
-			language: String(dto.language),
+			language: String(dto.language)
 		};
-		service.createSnippet.mockResolvedValue(saved);
+		serviceMock.createSnippet.mockResolvedValue(saved);
 
-		const result = await controller.createSnippet(dto);
-
-		expect(result).toEqual(saved);
-		expect(service.createSnippet).toHaveBeenCalledWith(dto);
+		await expect(controller.createSnippet(dto)).resolves.toEqual(saved);
+		expect(serviceMock.createSnippet).toHaveBeenCalledWith(dto);
 	});
 });
