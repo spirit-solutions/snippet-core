@@ -7,7 +7,7 @@ import { RpcException } from "@nestjs/microservices";
 
 import { SnippetService } from "../src/modules/snippet/snippet.service";
 import { SnippetEntity } from "../src/modules/snippet/infrastructure/snippet";
-import { CreateSnippetDto } from "../src/modules/snippet/dto/create-snippet.dto";
+import { CreateSnippetDto } from "../src/modules/snippet/dto/snippet";
 
 function makeRepoMock() {
 	const managerImpl = {
@@ -83,7 +83,7 @@ describe("SnippetService (unit)", () => {
 		];
 		repo.find.mockResolvedValue(rows);
 
-		await expect(service.getAll()).resolves.toEqual(rows);
+		await expect(service.getAllSnippets()).resolves.toEqual(rows);
 		expect(repo.find).toHaveBeenCalledTimes(1);
 	});
 

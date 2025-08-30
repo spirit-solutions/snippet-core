@@ -1,7 +1,7 @@
 import { NestFactory } from "@nestjs/core";
 import { AppModule } from "./modules/app.module";
-import { MicroserviceOptions, Transport } from "@nestjs/microservices";
-import { ConsoleLogger, ValidationPipe } from "@nestjs/common";
+import { MicroserviceOptions, RpcException, Transport } from "@nestjs/microservices";
+import { ConsoleLogger, HttpStatus, ValidationPipe } from "@nestjs/common";
 
 const PORT = 12000 as const;
 
@@ -16,7 +16,17 @@ async function bootstrap() {
 	app.useGlobalPipes(new ValidationPipe({
 		whitelist: true,
 		forbidNonWhitelisted: true,
-		transform: true
+		transform: true,
+		exceptionFactory: (errors) => {
+			return new RpcException({
+				status: HttpStatus.BAD_REQUEST,
+				message: "Validation failed",
+				errors: errors.map(e => ({
+					property: e.property,
+					constraints: e.constraints
+				}))
+			});
+		}
 	}));
 
 	app.connectMicroservice<MicroserviceOptions>({

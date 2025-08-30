@@ -1,7 +1,7 @@
 import { HttpStatus, Injectable, Logger } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { CreateSnippetDto } from "./dto/create-snippet.dto";
+import { CreateSnippetDto, GetAllSnippetsDto } from "./dto/snippet";
 import { RpcException } from "@nestjs/microservices";
 import { Snippet } from "./domain/entities/snippet";
 import { Language } from "./domain/entities/language";
@@ -15,9 +15,13 @@ export class SnippetService {
 
 	constructor(@InjectRepository(SnippetEntity) private snippetRepository: Repository<SnippetEntity>) {}
 
-	public getAll() {
+	public getAllSnippets(query: GetAllSnippetsDto) {
 		this.logger.log("Getting all snippets");
-		return this.snippetRepository.find();
+		return this.snippetRepository.find({
+			where: {
+				...(query.language && { language: query.language })
+			}
+		});
 	}
 
 	public async createSnippet({ code, language }: CreateSnippetDto) {

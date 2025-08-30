@@ -2,14 +2,14 @@ import "reflect-metadata";
 import { Test } from "@nestjs/testing";
 import { SnippetController } from "../src/modules/snippet/snippet.controller";
 import { SnippetService } from "../src/modules/snippet/snippet.service";
-import { CreateSnippetDto } from "../src/modules/snippet/dto/create-snippet.dto";
+import { CreateSnippetDto } from "../src/modules/snippet/dto/snippet";
 import { SnippetEntity } from "../src/modules/snippet/infrastructure/snippet";
 
 describe("SnippetController (unit)", () => {
 	let controller: SnippetController;
 
 	const serviceMock: Pick<jest.Mocked<SnippetService>, "getAll" | "createSnippet"> = {
-		getAll: jest.fn(),
+		getAllSnippets: jest.fn(),
 		createSnippet: jest.fn()
 	};
 
@@ -30,10 +30,10 @@ describe("SnippetController (unit)", () => {
 		const rows: SnippetEntity[] = [
 			{ id: "1", code: "a", code_hash: new Uint8Array([1]), language: "ts" }
 		];
-		serviceMock.getAll.mockResolvedValue(rows);
+		serviceMock.getAllSnippets.mockResolvedValue(rows);
 
-		await expect(controller.getSnippet()).resolves.toEqual(rows);
-		expect(serviceMock.getAll).toHaveBeenCalledTimes(1);
+		await expect(controller.getAllSnippets()).resolves.toEqual(rows);
+		expect(serviceMock.getAllSnippets).toHaveBeenCalledTimes(1);
 	});
 
 	it("create_snippet → service.createSnippet(dto)", async () => {
