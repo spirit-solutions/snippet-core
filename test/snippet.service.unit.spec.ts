@@ -79,11 +79,11 @@ describe("SnippetService (unit)", () => {
 	it("getAll(): returns all snippets from repository", async () => {
 		const rows: SnippetEntity[] = [
 			{ id: "a", code: "console.log(1)", code_hash: new Uint8Array([1]), language: "typescript" },
-			{ id: "b", code: "print('hi')", code_hash: new Uint8Array([2]), language: "python" }
+			{ id: "b", code: "print('hi')", code_hash: new Uint8Array([2]), language: "typescript" }
 		];
 		repo.find.mockResolvedValue(rows);
 
-		await expect(service.getAllSnippets()).resolves.toEqual(rows);
+		await expect(service.getAllSnippets({ language: "typescript" })).resolves.toEqual(rows);
 		expect(repo.find).toHaveBeenCalledTimes(1);
 	});
 
