@@ -16,4 +16,7 @@ export class SnippetEntity {
 
 	@Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
 	created_at: Date;
+
+	@Column({ type: "int", generated: "increment", unique: true })
+	sequence: number;
 }
