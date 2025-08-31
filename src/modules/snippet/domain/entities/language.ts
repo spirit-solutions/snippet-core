@@ -27,7 +27,7 @@ export class Language {
 	}
 }
 
-export const SUPPORTED_LANGUAGES = ["javascript", "python", "typescript"] as const;
+export const SUPPORTED_LANGUAGES = ["javascript", "python", "typescript", "csharp", "java"] as const;
 export const language = z.enum(SUPPORTED_LANGUAGES);
 
 export const languageSchema = z.custom<Language>(
