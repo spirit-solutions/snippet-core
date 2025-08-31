@@ -18,6 +18,9 @@ export class SnippetService {
 	public getAllSnippets(query: GetAllSnippetsDto) {
 		this.logger.log("Getting all snippets");
 		return this.snippetRepository.find({
+			order: {
+				created_at: "DESC"
+			},
 			where: {
 				...(query.language && { language: query.language })
 			}

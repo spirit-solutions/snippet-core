@@ -29,7 +29,8 @@ export class Snippet {
 		private readonly _id: string,
 		private readonly _code: string,
 		private readonly _language: Language,
-		private readonly _code_hash: Buffer
+		private readonly _code_hash: Buffer,
+		private readonly _created_at: Date
 	) {}
 
 	/**
@@ -59,7 +60,8 @@ export class Snippet {
 			v7(),
 			code,
 			language,
-			Snippet.generateCodeHash(code)
+			Snippet.generateCodeHash(code),
+			new Date()
 		);
 	}
 }
