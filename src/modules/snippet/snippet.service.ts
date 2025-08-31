@@ -27,6 +27,24 @@ export class SnippetService {
 		});
 	}
 
+	public async getSnippetById(id: string) {
+		this.logger.log(`Getting snippet by id: ${id}`);
+		const snippet = await this.snippetRepository.findOne({
+			where: {
+				id
+			}
+		});
+
+		if (!snippet) {
+			throw new RpcException({
+				status: HttpStatus.NOT_FOUND,
+				message: "Snippet not found"
+			});
+		}
+
+		return snippet;
+	}
+
 	public async createSnippet({ code, language }: CreateSnippetDto) {
 		this.logger.log("Creating a new snippet");
 

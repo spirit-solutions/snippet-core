@@ -1,7 +1,7 @@
 import { Body, Controller } from "@nestjs/common";
 import { SnippetService } from "./snippet.service";
 import { MessagePattern } from "@nestjs/microservices";
-import { CreateSnippetDto, GetAllSnippetsDto } from "./dto/snippet";
+import { CreateSnippetDto, GetAllSnippetsDto, GetSnippetByIdDto } from "./dto/snippet";
 import { SnippetEntity } from "./infrastructure/snippet";
 
 @Controller()
@@ -16,5 +16,10 @@ export class SnippetController {
 	@MessagePattern({ cmd: "create_snippet" })
 	async createSnippet(@Body() data: CreateSnippetDto): Promise<SnippetEntity> {
 		return await this.snippetService.createSnippet(data);
+	}
+
+	@MessagePattern({ cmd: "get_snippet_by_id" })
+	async getSnippetById(data: GetSnippetByIdDto): Promise<SnippetEntity | null> {
+		return await this.snippetService.getSnippetById(data.id);
 	}
 }
