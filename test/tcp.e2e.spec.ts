@@ -58,7 +58,7 @@ describe("snippet-service E2E (TCP)", () => {
 		process.env.SNIPPET_SERVICE_PORT = String(TCP_PORT);
 		process.env.NODE_ENV = process.env.NODE_ENV || "test";
 
-		const { AppModule } = (await import("../src/modules/app.module.js")) as { AppModule: EntryModule };
+		const { AppModule } = (await import("../src/modules/app.module")) as { AppModule: EntryModule };
 
 		app = await NestFactory.create(AppModule);
 		app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
