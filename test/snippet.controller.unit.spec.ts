@@ -8,7 +8,7 @@ import { SnippetEntity } from "../src/modules/snippet/infrastructure/snippet";
 describe("SnippetController (unit)", () => {
 	let controller: SnippetController;
 
-	const serviceMock: Pick<jest.Mocked<SnippetService>, "getAll" | "createSnippet"> = {
+	const serviceMock: Pick<jest.Mocked<SnippetService>, "getAllSnippets" | "createSnippet"> = {
 		getAllSnippets: jest.fn(),
 		createSnippet: jest.fn()
 	};
@@ -28,11 +28,11 @@ describe("SnippetController (unit)", () => {
 
 	it("get_all_snippets → service.getAll()", async () => {
 		const rows: SnippetEntity[] = [
-			{ id: "1", code: "a", code_hash: new Uint8Array([1]), language: "ts" }
+			{ id: "1", code: "a", code_hash: new Uint8Array([1]), language: "ts", created_at: new Date(), sequence: 1 }
 		];
 		serviceMock.getAllSnippets.mockResolvedValue(rows);
 
-		await expect(controller.getAllSnippets()).resolves.toEqual(rows);
+		await expect(controller.getAllSnippets({})).resolves.toEqual(rows);
 		expect(serviceMock.getAllSnippets).toHaveBeenCalledTimes(1);
 	});
 
@@ -43,7 +43,9 @@ describe("SnippetController (unit)", () => {
 			id: "generated-id",
 			code: dto.code,
 			code_hash: new Uint8Array([3]),
-			language: String(dto.language)
+			language: String(dto.language),
+			created_at: new Date(),
+			sequence: 5
 		};
 		serviceMock.createSnippet.mockResolvedValue(saved);
 

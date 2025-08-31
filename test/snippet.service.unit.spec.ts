@@ -78,8 +78,8 @@ describe("SnippetService (unit)", () => {
 
 	it("getAll(): returns all snippets from repository", async () => {
 		const rows: SnippetEntity[] = [
-			{ id: "a", code: "console.log(1)", code_hash: new Uint8Array([1]), language: "typescript" },
-			{ id: "b", code: "print('hi')", code_hash: new Uint8Array([2]), language: "typescript" }
+			{ id: "a", code: "console.log(1)", code_hash: new Uint8Array([1]), language: "typescript", created_at: new Date(), sequence: 5 },
+			{ id: "b", code: "print('hi')", code_hash: new Uint8Array([2]), language: "typescript", created_at: new Date(), sequence: 6 }
 		];
 		repo.find.mockResolvedValue(rows);
 
@@ -101,7 +101,7 @@ describe("SnippetService (unit)", () => {
 					? (input as SnippetEntity).id
 					: (globalThis.crypto?.randomUUID?.() ?? "generated-id");
 
-			const entity: SnippetEntity = { id, code, code_hash: codeHash, language };
+			const entity: SnippetEntity = { id, code, code_hash: codeHash, language, created_at: new Date(), sequence: 8 };
 			return Promise.resolve(entity);
 		});
 

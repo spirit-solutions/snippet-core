@@ -33,7 +33,6 @@ describe("snippet-service E2E (TCP)", () => {
 	let client: ClientProxy;
 
 	beforeAll(async () => {
-		// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 		pg = await new GenericContainer("postgres:17.5")
 			.withEnvironment({
 				POSTGRES_USER: "tereza",
@@ -59,7 +58,7 @@ describe("snippet-service E2E (TCP)", () => {
 		process.env.SNIPPET_SERVICE_PORT = String(TCP_PORT);
 		process.env.NODE_ENV = process.env.NODE_ENV || "test";
 
-		const { AppModule } = (await import("../src/modules/app.module")) as { AppModule: EntryModule };
+		const { AppModule } = (await import("../src/modules/app.module.js")) as { AppModule: EntryModule };
 
 		app = await NestFactory.create(AppModule);
 		app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));

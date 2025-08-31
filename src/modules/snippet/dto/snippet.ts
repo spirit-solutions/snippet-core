@@ -17,5 +17,5 @@ export class CreateSnippetDto {
 export class GetAllSnippetsDto {
 	@IsEnum(SUPPORTED_LANGUAGES)
 	@IsOptional()
-	language: SupportedLanguages;
+	language?: SupportedLanguages;
 }
